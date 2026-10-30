@@ -1,0 +1,29 @@
+name: Build minilzo Wheels
+
+on:
+  push:
+    tags: ['v*']  # 推送 v 开头的 tag 时触发，也可改为 workflow_dispatch 手动触发
+  workflow_dispatch:
+
+jobs:
+  build_wheels:
+    name: Build wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest]  # 你只需要 Windows 的 wheel，可扩展到其他平台
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.23.0  # 建议使用较新版本，注意查看最新 release
+        # 如果你只关心 Windows，可以不做额外配置
+        # 如果需要指定 Python 版本，可在 with 或 env 中设置
+        # with:
+        #   build: "cp314-*"   # 明确指定 Python 3.14
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: minilzo-wheels-${{ matrix.os }}
+          path: ./wheelhouse/*.whl
