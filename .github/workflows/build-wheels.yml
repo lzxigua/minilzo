@@ -17,11 +17,10 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.23.0  # 建议使用较新版本，注意查看最新 release
-        # 如果你只关心 Windows，可以不做额外配置
-        # 如果需要指定 Python 版本，可在 with 或 env 中设置
-        # with:
-        #   build: "cp314-*"   # 明确指定 Python 3.14
+        uses: pypa/cibuildwheel@v4.3.0   # 直接使用当前最新版本
+        env:
+          CIBW_BUILD: "cp314-*"          # 锁定 Python 3.14
+          CIBW_ARCHS_WINDOWS: "AMD64"    # 只要 64 位
 
       - uses: actions/upload-artifact@v4
         with:
